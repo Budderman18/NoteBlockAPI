@@ -169,7 +169,7 @@ public class CompatibilityUtils {
 	 */
 	public static void playSound(Player player, Location location, String sound,
 								 SoundCategory category, float volume, float pitch, float distance) {
-		playSoundUniversal(player, location, sound, category, volume, pitch, distance);
+		playSoundUniversal(player, location, sound, category, volume, pitch, distance, sound);
 	}
 
 	/**
@@ -184,11 +184,11 @@ public class CompatibilityUtils {
 	 */
 	public static void playSound(Player player, Location location, Sound sound,
 								 SoundCategory category, float volume, float pitch, float distance) {
-		playSoundUniversal(player, location, sound, category, volume, pitch, distance);
+		playSoundUniversal(player, location, sound, category, volume, pitch, distance, sound.name());
 	}
 
 	private static void playSoundUniversal(Player player, Location location, Object sound,
-								 SoundCategory category, float volume, float pitch, float distance) {
+								 SoundCategory category, float volume, float pitch, float distance, String backupSound) {
 		try {
 			if (isSoundCategoryCompatible()) {
 				Method method = getPlaySoundMethod(sound.getClass(), true);
