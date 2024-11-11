@@ -92,7 +92,7 @@ public class CompatibilityUtils {
 	 * @return can use SoundCategory
 	 */
 	protected static boolean isSoundCategoryCompatible() {
-		return getServerVersion() >= 0.0111f;
+		return getServerVersion() >= 0.0111f && getServerVersion() < 0.012103f;
 	}
 	
 	/**
@@ -196,7 +196,13 @@ public class CompatibilityUtils {
 				method.invoke(player, MathUtils.stereoPan(location, distance), sound, soundCategoryEnum, volume, pitch);
 			} else {
 				Method method = getPlaySoundMethod(sound.getClass(), false);
-				method.invoke(player, MathUtils.stereoPan(location, distance), sound, volume, pitch);
+				//ctach in place to support 1.21.3
+				try {
+                                    method.invoke(player, MathUtils.stereoPan(location, distance), sound, volume, pitch);
+                                }
+                                catch (IllegalArgumentException e) {
+                                    method.invoke(player, MathUtils.stereoPan(location, distance), backupSound.toLowerCase().replaceAll("block_note_block_", "block.note_block."), volume, pitch);
+                                }
 			}
 		} catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
